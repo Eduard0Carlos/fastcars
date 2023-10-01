@@ -1,0 +1,26 @@
+@import "styles/variables";
+
+.cancel-button {
+    align-items: center;
+    height: 50px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    background-color: $light-gray;
+    border-radius: 10px;
+    outline: 1px solid;
+    width: 100%;
+
+    & h1 {
+        font-weight: 200;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+
+    &:hover {
+        animation-name: cancel-button;
+        animation-duration: .5s;
+        background-color: $dark;
+        color: $light-gray;
+    }
+}
