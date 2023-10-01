@@ -1,0 +1,139 @@
+@import "styles/variables";
+@import "styles/variables";
+
+@keyframes onHoverRegister {
+    0% {
+        filter: brightness(100%);
+    }
+
+    100% {
+        filter: brightness(200%);
+    }
+}
+
+.register-page {
+    & .page-title {
+        margin-top: 0 !important;
+    }
+
+    & .register-container {
+        width: 70%;
+        height: 50vh;
+        margin: auto;
+        margin-top: 8cqb;
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        padding-bottom: 8cqb;
+        font-family: 'Inter';
+        color: $dark;
+        gap: 20px;
+
+        & input {
+            height: 45px;
+            box-shadow: inset 0px 0px 10px 1px rgba($dark, 0.1);
+        }
+
+        & .login-section {
+            margin: auto;
+            margin-top: 0;
+            margin-bottom: 0;
+            padding-left: 20px;
+
+            & span {
+                color: $unselected-dark;
+                font-weight: 300;
+            }
+
+            & a {
+                text-decoration: none;
+            }
+
+            & .login-text {
+                font-weight: 500;
+                color: $secondary-color;
+                cursor: pointer;
+
+                &:hover {
+                    animation-name: onHoverRegister;
+                    animation-duration: 0.5s;
+                    filter: brightness(200%);
+                }
+            }
+        }
+
+        & .section {
+            margin: auto;
+            width: 50%;
+            background-color: $white;
+            margin-bottom: 0;
+            padding: 20px;
+            border-radius: 10px;
+            filter: drop-shadow(0 5px 5px rgba($unselected-dark, 0.05));
+
+            & .fields {
+                display: flex;
+                flex-direction: column;
+                gap: 20px 50px;
+                justify-content: center;
+                align-content: center;
+
+                & .field {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 3px;
+
+                    &.error {
+                        & input {
+                            box-shadow: inset 0px 0px 10px 1px rgba(255, 0, 0, 0.3);
+                        }
+
+                        & input::placeholder {
+                            color: red;
+                        }
+
+                        & span {
+                            margin: 0;
+                            padding: 0;
+                            font-size: 14px;
+                            font-weight: 300;
+                            font-family: 'Inter';
+                            color: red
+                        }
+                    }
+                }
+
+
+            }
+
+            & .profile-picture {
+                width: 256px;
+                height: 256px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+                margin: auto;
+                background-color: $light-gray;
+                border-radius: 600px;
+                color: rgba($dark, 0.3);
+                overflow: hidden;
+
+                & img {
+                    width: auto;
+                    height: 100%;
+                }
+            }
+        }
+
+        & .buttons {
+            width: 50%;
+            display: flex;
+            margin: auto;
+            margin-top: 20px;
+            flex-direction: row;
+            gap: 20px;
+            padding-bottom: 8cqb;
+        }
+    }
+}

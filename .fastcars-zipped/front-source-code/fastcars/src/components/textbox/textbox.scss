@@ -1,0 +1,17 @@
+@import "styles/variables";
+
+.textbox {
+    margin: 0;
+    border-style: none;
+    padding: 10px;
+    border-radius: 6px;
+    background-color: #FFF;
+    color: black;
+    font-family: 'Inter', sans-serif;
+    font-weight: 200;
+    // outline-style: solid;
+    // outline-color: $unselected-dark;
+    // outline-width: 1px;
+    outline-style: none;
+    background: $light-gray;
+}

@@ -1,0 +1,78 @@
+@import "styles/variables";
+
+@keyframes onTextHover {
+    0% {
+        color: $dark;
+        fill: $dark;
+    }
+
+    100% {
+        color: $secondary-color;
+        fill: $secondary-color;
+    }
+}
+
+.login-register-buttons {
+    display: flex;
+    flex-direction: row;
+    gap:20px;
+}
+
+.no-background {
+    background: none!important;
+}
+
+.pointer-cursor {
+    cursor: pointer;
+}
+
+.header-submenu-link {
+    width: 100%;
+}
+
+.fastcar-header {
+    background-color: $light-gray !important;
+
+    & .logo {
+        width: 60px;
+        height: auto;
+        cursor: pointer;
+        margin: 0px;
+        fill: $dark;
+        padding-left: 10px;
+        color: $dark;
+    }
+
+    & a:hover {
+        animation-name: onTextHover;
+        animation-duration: 0.5s;
+        color: $secondary-color;
+
+        .logo {
+            animation-name: onTextHover;
+            animation-duration: 0.5s;
+            color: $secondary-color;
+            fill: $secondary-color;
+        }
+    }
+
+    & .profile-picture {
+        width: 36px;
+        height: 36px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        border-radius: 600px;
+        margin-right: 20px;
+        cursor: pointer;
+        background-color: $gray;
+        text-align: center;
+        justify-content: center;
+
+        & img {
+            width: 24px;
+            height: 24px;
+            border-radius: 600px;
+        }
+    }
+}

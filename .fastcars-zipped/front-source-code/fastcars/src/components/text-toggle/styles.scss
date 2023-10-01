@@ -1,0 +1,42 @@
+@import "styles/variables";
+
+@keyframes check {
+    0% {
+        background-color: $dark;
+    }
+
+    100% {
+        background-color: $secondary-color!important;
+    }
+}
+
+@keyframes hovered {
+    0% {filter: brightness(100%);}
+    100% {filter: brightness(150%);}
+}
+
+.text-toggle {
+    width: 40px;
+    height: 40px;
+    background-color: $dark;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    text-align: center;
+    font-family: 'Inter';
+    color: $white;
+    cursor: pointer;
+
+    & h1 {
+        font-size: 20px;
+        font-weight: 200;
+    }
+
+    &:hover {
+        animation-name: hovered;
+        animation-duration: 0.5s;
+        filter: brightness(150%);
+    }
+}

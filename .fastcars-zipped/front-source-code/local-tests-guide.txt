@@ -1,0 +1,16 @@
+OPÇÃO 1 - Rodar localmente:
+
+    ATENÇÃO: Executar os passos abaixo em /front-source-code/fastcars/
+
+    Dependências: Node JS - https://nodejs.org/en/download
+
+    1. Abrir o git bash de preferência;
+    2. Instalar dependências utilizando o comando "npm install";
+    3. Rodar o projeto utilizando "npm start";
+
+OPÇÃO 2 - Acessar o site hospedado em nuvem:
+
+    Acessar https://fastcars.vercel.app/
+
+Muito obrigado!
+Atenciosamente, Carlos Eduardo Vieira - rm 98575
