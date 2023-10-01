@@ -12,6 +12,8 @@ npm install
 npm start
 ```
 
+> Obs: Arquivo .env removido na versão de github para preservar as API's keys privadas
+
 ## Site Hospedado
 
 1. Acessar url https://fastcars.vercel.app/
