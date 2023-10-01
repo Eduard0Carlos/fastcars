@@ -1,0 +1,67 @@
+@import "styles/variables";
+
+@keyframes confirm-button {
+    0% {
+        filter: brightness(100%);
+    }
+
+    100% {
+        filter: brightness(150%);
+    }
+}
+
+.announce-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 80vh;
+    gap: 100px;
+
+    & .page-title {
+        margin-top: 121px !important;
+    }
+
+    & .button {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        background-color: $dark;
+        width: 50%;
+        cursor: pointer;
+        height: 250px;
+
+        & h1 {
+            color: $light-gray;
+            font-weight: 200;
+        }
+
+        &:hover {
+            animation-name: confirm-button;
+            animation-duration: 0.5s;
+            filter: brightness(150%);
+
+            & .backtext {
+                font-size: 55px;
+                filter: brightness(145%);
+                display: block;
+                animation-name: letter-confirm;
+                animation-duration: 0.5s;
+                letter-spacing: 40px;
+            }
+        }
+    }
+
+    & .new-button {
+        right: 0;
+        margin-left: auto;
+    }
+
+    & .backtext {
+        letter-spacing: -20px;
+        color: $dark!important;
+        display: none;
+        position: absolute;
+        z-index: -1;
+    }
+}

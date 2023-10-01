@@ -1,0 +1,61 @@
+@import "styles/variables";
+
+.pendent-announce-page {
+    & .page-title {
+        margin-top: 121px!important;
+    }
+
+    & .pendent-announce-container {
+        width: 70%;
+        height: auto;
+        margin: auto;
+        margin-top: 60px;
+        display: flex;
+        flex-direction: column;
+    
+        &-cards {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            width: 100%;
+            height: auto;
+            gap: 121px 20px;
+        }
+    }
+    
+    & .filter {
+        display: block;
+        background-color: $dark;
+        width: 100%;
+        padding: 15px 0;
+        height: auto;
+        margin: auto;
+    
+        & .filter-fields {
+            width: 70%;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 49%));
+            gap: 20px;
+    
+            & input {
+                outline-style: none !important;
+                height: 40px;
+                background-color: $dark-gray;
+                color: $gray;
+    
+                &::placeholder {
+                    color: $gray;
+                }
+            }
+    
+            & select {
+                height: 40px;
+                outline-style: none !important;
+                background-color: $dark-gray;
+                color: $gray;
+            }
+        }
+    }
+}
+
