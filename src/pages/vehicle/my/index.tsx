@@ -23,90 +23,90 @@ import clockIcon from "assets/clock-icon.png";
 import infoIcon from "assets/info-icon.png";
 
 const PendentAnnouncesPage = () => {
-	const orderOptions: IOrdenation<IRent>[] = [
-		{
-			showName: "Título",
-			value: (vehicle1: IRent, vehicle2: IRent) => { return vehicle1?.vehicleName?.toLowerCase()?.localeCompare(vehicle2?.vehicleName?.toLowerCase()); }
-		}
-	];
+  const orderOptions: IOrdenation<IRent>[] = [
+    {
+      showName: "Título",
+      value: (vehicle1: IRent, vehicle2: IRent) => { return vehicle1?.vehicleName?.toLowerCase()?.localeCompare(vehicle2?.vehicleName?.toLowerCase()); }
+    }
+  ];
 
-	useEffect(() => {
-		if (!localStorage.getItem("user"))
-			navigate("/login", { replace: true });
-	}, []);
+  useEffect(() => {
+    if (!localStorage.getItem("user"))
+      navigate("/login", { replace: true });
+  }, []);
 
-	if (!localStorage.getItem("user"))
-		return <></>;
+  if (!localStorage.getItem("user"))
+    return <></>;
 
-	const navigate = useNavigate();
-	const loggedUser: IUser = JSON.parse(localStorage.getItem("user")!);
-	const [apiRents, setApiRents] = useState<IRent[]>([]);
-	const [rents, setRents] = useState<IRent[]>([]);
-	const [allFilters, setAllFilters] = useState<string[]>([]);
-	const [ordenation, setOrdenation] = useState<IOrdenation<IRent> | undefined>();
+  const navigate = useNavigate();
+  const loggedUser: IUser = JSON.parse(localStorage.getItem("user")!);
+  const [apiRents, setApiRents] = useState<IRent[]>([]);
+  const [rents, setRents] = useState<IRent[]>([]);
+  const [allFilters, setAllFilters] = useState<string[]>([]);
+  const [ordenation, setOrdenation] = useState<IOrdenation<IRent> | undefined>();
 
-	const db = getDatabase(App);
-	const vehiclesReference = ref(db, "/rent");
+  const db = getDatabase(App);
+  const vehiclesReference = ref(db, "/rent");
 
-	useEffect(() => {
-		if (!apiRents || apiRents.length == 0)
-			get(query(vehiclesReference)).then(x => {
-				const dbVehicles: IRent[] = Object.values(x.val());
-				const userDbVehicles = dbVehicles.filter(x => x.rentUserId == loggedUser.id);
+  useEffect(() => {
+    if (!apiRents || apiRents.length == 0)
+      get(query(vehiclesReference)).then(x => {
+        const dbVehicles: IRent[] = Object.values(x.val());
+        const userDbVehicles = dbVehicles.filter(x => x.rentUserId == loggedUser.id);
 
-				setApiRents(userDbVehicles.sort((a, b) => a.status - b.status));
-				setRents(userDbVehicles.sort((a, b) => a.status - b.status));
-			});
-	}, []);
+        setApiRents(userDbVehicles.sort((a, b) => a.status - b.status));
+        setRents(userDbVehicles.sort((a, b) => a.status - b.status));
+      });
+  }, []);
 
-	useEffect(() => {
-		ApplyFiltersAndOrdenations();
-	}, [allFilters, ordenation]);
+  useEffect(() => {
+    ApplyFiltersAndOrdenations();
+  }, [allFilters, ordenation]);
 
-	const addFilter = (filter: string) => {
-		const filters = filter.split(" ");
+  const addFilter = (filter: string) => {
+    const filters = filter.split(" ");
 
-		setAllFilters(filters);
-	};
+    setAllFilters(filters);
+  };
 
-	const ApplyFiltersAndOrdenations = () => {
-		let filteredApiVehicles = apiRents.filter(vehicle => allFilters.filter(x => vehicle.smartSearch.toLowerCase().includes(x.toLowerCase())).length == allFilters.length);
+  const ApplyFiltersAndOrdenations = () => {
+    let filteredApiVehicles = apiRents.filter(vehicle => allFilters.filter(x => vehicle.smartSearch.toLowerCase().includes(x.toLowerCase())).length == allFilters.length);
 
-		if (ordenation != undefined)
-			filteredApiVehicles = filteredApiVehicles.sort(ordenation.value);
+    if (ordenation != undefined)
+      filteredApiVehicles = filteredApiVehicles.sort(ordenation.value);
 
-		setRents(filteredApiVehicles);
-	};
+    setRents(filteredApiVehicles);
+  };
 
-	const addOrdenation = (value: string) => {
-		const orderOption = orderOptions.filter(x => x.showName == value)[0];
+  const addOrdenation = (value: string) => {
+    const orderOption = orderOptions.filter(x => x.showName == value)[0];
 
-		setOrdenation(orderOption);
-	};
+    setOrdenation(orderOption);
+  };
 
-	return (
-		<div className="pendent-announce-page">
-			<PageTitle pageName="Meus" />
-			<div className="filter">
-				<div className="filter-fields">
-					<TextBox placeholder="Pesquisar" onChange={addFilter} />
-					<Dropdown onChange={addOrdenation} options={orderOptions.map(x => x.showName)} placeholder="Ordenar Por" />
-				</div>
-			</div>
-			<div className="pendent-announce-container">
-				<div className="pendent-announce-container-cards">
-					{rents.map(rent => (
-						<VehicleCard key={rent.id} notClickable isDeactivate={(rent.status != RentStatus.APPROVED)} title={rent.vehicleName} image={rent.vehicleImage}>
-							<VehicleCardIcon icon={clockIcon} roundedIcon text={`De ${rent?.vehicleRentInitialDate ?? "-"} até ${rent?.vehicleRentFinalDate ?? "-"}`} />
-							<VehicleCardIcon icon={calendarIcon} text={`Solicitado dia ${rent?.createdAt ?? "-"}`} />
-							<VehicleCardIcon icon={infoIcon} text={`${rent.status == 1 ? "Locação APROVADA" : rent.status == 2 ? "Locação NEGADA" : "Locação PENDENTE"}`} />
-							<VehicleCardIcon icon={rent.vehicleOwnerImage} roundedIcon text={`${rent.vehicleOwnerName}`} />
-						</VehicleCard>
-					))}
-				</div>
-			</div>
-		</div>
-	);
+  return (
+    <div className="pendent-announce-page">
+      <PageTitle pageName="Meus" />
+      <div className="filter">
+        <div className="filter-fields">
+          <TextBox placeholder="Pesquisar" onChange={addFilter} />
+          <Dropdown onChange={addOrdenation} options={orderOptions.map(x => x.showName)} placeholder="Ordenar Por" />
+        </div>
+      </div>
+      <div className="pendent-announce-container">
+        <div className="pendent-announce-container-cards">
+          {rents.map(rent => (
+            <VehicleCard key={rent.id} notClickable isDeactivate={(rent.status != RentStatus.APPROVED)} title={rent.vehicleName} image={rent.vehicleImage}>
+              <VehicleCardIcon icon={clockIcon} roundedIcon text={`De ${rent?.vehicleRentInitialDate ?? "-"} até ${rent?.vehicleRentFinalDate ?? "-"}`} />
+              <VehicleCardIcon icon={calendarIcon} text={`Solicitado dia ${rent?.createdAt ?? "-"}`} />
+              <VehicleCardIcon icon={infoIcon} text={`${rent.status == 1 ? "Locação APROVADA" : rent.status == 2 ? "Locação NEGADA" : "Locação PENDENTE"}`} />
+              <VehicleCardIcon icon={rent.vehicleOwnerImage} roundedIcon text={`${rent.vehicleOwnerName}`} />
+            </VehicleCard>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default PendentAnnouncesPage;

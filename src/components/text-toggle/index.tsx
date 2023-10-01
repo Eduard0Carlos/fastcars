@@ -10,26 +10,26 @@ interface ITextToggleProps {
 }
 
 const TextToggle = (props: ITextToggleProps) => {
-	const [isChecked, setIsChecked] = useState<boolean>(false);
+  const [isChecked, setIsChecked] = useState<boolean>(false);
 
-	useEffect(() => {
-		if (isChecked && props.onActive)
-			props.onActive(props.value ?? "");
+  useEffect(() => {
+    if (isChecked && props.onActive)
+      props.onActive(props.value ?? "");
 
-		if (!isChecked && props.onDeactivate)
-			props.onDeactivate(props.value ?? "");
-	}, [isChecked]);
+    if (!isChecked && props.onDeactivate)
+      props.onDeactivate(props.value ?? "");
+  }, [isChecked]);
 
-	return (
-		<div className="text-toggle"
-			style={{ backgroundColor: isChecked ? "#C42139" : "#333333" }}
-			onClick={evento => {
-				setIsChecked(isChecked ? false : true);
-			}
-			}>
-			<h1>{props.text}</h1>
-		</div>
-	);
+  return (
+    <div className="text-toggle"
+      style={{ backgroundColor: isChecked ? "#C42139" : "#333333" }}
+      onClick={evento => {
+        setIsChecked(isChecked ? false : true);
+      }
+      }>
+      <h1>{props.text}</h1>
+    </div>
+  );
 };
 
 export default TextToggle;

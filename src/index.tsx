@@ -21,35 +21,35 @@ import AboutPage from "pages/about";
 import { Toaster } from "components/toast/toaster";
 
 const AppRouter = () => {
-	return (
-		<main className="main-container">
-			<BrowserRouter>
-				<AppHeader />
-				<Toaster />
-				<Routes>
-					<Route path='/' element={<HomePage />} />
-					<Route path='login' element={<LoginPage />} />
-					<Route path='register' element={<RegisterPage />} />
-					<Route path='catalog' element={<CatalogPage />} />
-					<Route path='catalog/vehicle/:id' element={<VehicleDetailPage />} />
-					<Route path='announce' element={<AnnouncePage />} />
-					<Route path='announce/new' element={<NewAnnouncePage />} />
-					<Route path='announce/my' element={<MyAnnouncePage />} />
-					<Route path='announce/my/:id' element={<MyAnnouncePage />} />
-					<Route path='announce/pendents' element={<PendentAnnouncesPage />} />
-					<Route path='vehicles/my' element={<MyVehiclesPage />} />
-					<Route path='about' element={<AboutPage />} />
-					<Route path='*' element={<NotFoundPage />} />
-				</Routes>
-			</BrowserRouter>
-		</main>
-	);
+  return (
+    <main className="main-container">
+      <BrowserRouter>
+        <AppHeader />
+        <Toaster />
+        <Routes>
+          <Route path='/' element={<HomePage />} />
+          <Route path='login' element={<LoginPage />} />
+          <Route path='register' element={<RegisterPage />} />
+          <Route path='catalog' element={<CatalogPage />} />
+          <Route path='catalog/vehicle/:id' element={<VehicleDetailPage />} />
+          <Route path='announce' element={<AnnouncePage />} />
+          <Route path='announce/new' element={<NewAnnouncePage />} />
+          <Route path='announce/my' element={<MyAnnouncePage />} />
+          <Route path='announce/my/:id' element={<MyAnnouncePage />} />
+          <Route path='announce/pendents' element={<PendentAnnouncesPage />} />
+          <Route path='vehicles/my' element={<MyVehiclesPage />} />
+          <Route path='about' element={<AboutPage />} />
+          <Route path='*' element={<NotFoundPage />} />
+        </Routes>
+      </BrowserRouter>
+    </main>
+  );
 };
 
 ReactDOM.render(
-	<React.StrictMode>
-		<AppRouter/>
-	</React.StrictMode>,
-	document.getElementById("root")
+  <React.StrictMode>
+    <AppRouter/>
+  </React.StrictMode>,
+  document.getElementById("root")
 );
 

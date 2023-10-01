@@ -10,19 +10,19 @@ interface ITextBoxProperties {
 }
 
 const TextBox = (props: ITextBoxProperties) => {
-	const onTyped = (event: React.ChangeEvent<HTMLInputElement>) => {
-		if (props.onChange != undefined)
-			props.onChange(event.target.value);
-	};
+  const onTyped = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (props.onChange != undefined)
+      props.onChange(event.target.value);
+  };
 
-	return (
-		<input maxLength={props.maxLength} 
-			onChange={onTyped} 
-			value={props.value} 
-			className="textbox" 
-			type={!props.type ? (props.onlyNumbers ? "number" : "text") : props.type}
-			placeholder={props.placeholder} />
-	);
+  return (
+    <input maxLength={props.maxLength} 
+      onChange={onTyped} 
+      value={props.value} 
+      className="textbox" 
+      type={!props.type ? (props.onlyNumbers ? "number" : "text") : props.type}
+      placeholder={props.placeholder} />
+  );
 };
 
 export default TextBox;

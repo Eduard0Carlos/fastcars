@@ -23,198 +23,198 @@ import clockIcon from "assets/clock-icon.png";
 import infoIcon from "assets/info-icon.png";
 
 const PendentAnnouncesPage = () => {
-	const orderOptions: IOrdenation<IRent>[] = [
-		{
-			showName: "Título",
-			value: (vehicle1: IRent, vehicle2: IRent) => { return vehicle1?.vehicleName?.toLowerCase()?.localeCompare(vehicle2?.vehicleName?.toLowerCase()); }
-		}
-	];
+  const orderOptions: IOrdenation<IRent>[] = [
+    {
+      showName: "Título",
+      value: (vehicle1: IRent, vehicle2: IRent) => { return vehicle1?.vehicleName?.toLowerCase()?.localeCompare(vehicle2?.vehicleName?.toLowerCase()); }
+    }
+  ];
 
-	useEffect(() => {
-		if (!localStorage.getItem("user"))
-			navigate("/login", { replace: true });
-	}, []);
+  useEffect(() => {
+    if (!localStorage.getItem("user"))
+      navigate("/login", { replace: true });
+  }, []);
 
-	if (!localStorage.getItem("user"))
-		return <></>;
+  if (!localStorage.getItem("user"))
+    return <></>;
 
-	const navigate = useNavigate();
-	const loggedUser: IUser = JSON.parse(localStorage.getItem("user")!);
-	const [apiRents, setApiRents] = useState<IRent[]>([]);
-	const [rents, setRents] = useState<IRent[]>([]);
-	const [allFilters, setAllFilters] = useState<string[]>([]);
-	const [ordenation, setOrdenation] = useState<IOrdenation<IRent> | undefined>();
-	const [selectedRentId, setSelectedRentId] = useState<string>();
-	const [rentConfirmed, setRentConfirmed] = useState<boolean>();
+  const navigate = useNavigate();
+  const loggedUser: IUser = JSON.parse(localStorage.getItem("user")!);
+  const [apiRents, setApiRents] = useState<IRent[]>([]);
+  const [rents, setRents] = useState<IRent[]>([]);
+  const [allFilters, setAllFilters] = useState<string[]>([]);
+  const [ordenation, setOrdenation] = useState<IOrdenation<IRent> | undefined>();
+  const [selectedRentId, setSelectedRentId] = useState<string>();
+  const [rentConfirmed, setRentConfirmed] = useState<boolean>();
 
-	const db = getDatabase(App);
-	const vehiclesReference = ref(db, "/rent");
+  const db = getDatabase(App);
+  const vehiclesReference = ref(db, "/rent");
 
-	useEffect(() => {
-		if (!apiRents || apiRents.length == 0)
-			get(query(vehiclesReference)).then(x => {
-				const dbVehicles: IRent[] = Object.values(x.val());
-				const userDbVehicles = dbVehicles.filter(x => x.vehicleOwnerId == loggedUser.id);
+  useEffect(() => {
+    if (!apiRents || apiRents.length == 0)
+      get(query(vehiclesReference)).then(x => {
+        const dbVehicles: IRent[] = Object.values(x.val());
+        const userDbVehicles = dbVehicles.filter(x => x.vehicleOwnerId == loggedUser.id);
 
-				setApiRents(userDbVehicles.sort((a, b) => a.status - b.status));
-				setRents(userDbVehicles.sort((a, b) => a.status - b.status));
-			});
-	}, []);
+        setApiRents(userDbVehicles.sort((a, b) => a.status - b.status));
+        setRents(userDbVehicles.sort((a, b) => a.status - b.status));
+      });
+  }, []);
 
-	useEffect(() => {
-		ApplyFiltersAndOrdenations();
-	}, [allFilters, ordenation]);
+  useEffect(() => {
+    ApplyFiltersAndOrdenations();
+  }, [allFilters, ordenation]);
 
-	const addFilter = (filter: string) => {
-		const filters = filter.split(" ");
+  const addFilter = (filter: string) => {
+    const filters = filter.split(" ");
 
-		setAllFilters(filters);
-	};
+    setAllFilters(filters);
+  };
 
-	const ApplyFiltersAndOrdenations = () => {
-		let filteredApiVehicles = apiRents.filter(vehicle => allFilters.filter(x => vehicle.smartSearch.toLowerCase().includes(x.toLowerCase())).length == allFilters.length);
+  const ApplyFiltersAndOrdenations = () => {
+    let filteredApiVehicles = apiRents.filter(vehicle => allFilters.filter(x => vehicle.smartSearch.toLowerCase().includes(x.toLowerCase())).length == allFilters.length);
 
-		if (ordenation != undefined)
-			filteredApiVehicles = filteredApiVehicles.sort(ordenation.value);
+    if (ordenation != undefined)
+      filteredApiVehicles = filteredApiVehicles.sort(ordenation.value);
 
-		setRents(filteredApiVehicles);
-	};
+    setRents(filteredApiVehicles);
+  };
 
-	const addOrdenation = (value: string) => {
-		const orderOption = orderOptions.filter(x => x.showName == value)[0];
+  const addOrdenation = (value: string) => {
+    const orderOption = orderOptions.filter(x => x.showName == value)[0];
 
-		setOrdenation(orderOption);
-	};
+    setOrdenation(orderOption);
+  };
 
-	const onSubmit = async () => {
-		try {
-			const rentRef = ref(db, `/rent/${selectedRentId}`);
+  const onSubmit = async () => {
+    try {
+      const rentRef = ref(db, `/rent/${selectedRentId}`);
 
-			const rent: IRent = (await get(query(rentRef))).val();
+      const rent: IRent = (await get(query(rentRef))).val();
 
-			if (rent.status != RentStatus.PENDENT) return;
+      if (rent.status != RentStatus.PENDENT) return;
 
-			const vehicleRef = ref(db, `/vehicles/${rent.vehicleId}`);
+      const vehicleRef = ref(db, `/vehicles/${rent.vehicleId}`);
 
-			const vehicle: IVehicle = (await get(query(vehicleRef))).val();
+      const vehicle: IVehicle = (await get(query(vehicleRef))).val();
 
-			const totalDays = rent?.totalDays ?? 0;
+      const totalDays = rent?.totalDays ?? 0;
 
-			vehicle.totalRent += 1;
-			vehicle.totalReceipt += totalDays * vehicle.price;
+      vehicle.totalRent += 1;
+      vehicle.totalReceipt += totalDays * vehicle.price;
 
-			rent.status = RentStatus.APPROVED;
+      rent.status = RentStatus.APPROVED;
 
-			await set(vehicleRef, vehicle);
-			await set(rentRef, rent);
+      await set(vehicleRef, vehicle);
+      await set(rentRef, rent);
 
-			const cacheRent = rents.find(x => x.id == selectedRentId);
+      const cacheRent = rents.find(x => x.id == selectedRentId);
 
-			if (cacheRent) {
-				cacheRent.status = RentStatus.APPROVED;
+      if (cacheRent) {
+        cacheRent.status = RentStatus.APPROVED;
 
-				setRents([...rents.filter(x => x.id != cacheRent?.id), cacheRent]);
-			}
+        setRents([...rents.filter(x => x.id != cacheRent?.id), cacheRent]);
+      }
 
-			toast({
-				title: `Locação ${rentConfirmed ? "confirmada" : "negada"} com sucesso ✔`
-			});
-		} catch (error) {
-			console.log(error);
-			toast({
-				title: "Um erro inesperado ocorreu ❌",
-				description: "Tivemos um problema ao tentar salvar seus dados, tente novamente mais tarde"
-			});
-		}
-	};
+      toast({
+        title: `Locação ${rentConfirmed ? "confirmada" : "negada"} com sucesso ✔`
+      });
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Um erro inesperado ocorreu ❌",
+        description: "Tivemos um problema ao tentar salvar seus dados, tente novamente mais tarde"
+      });
+    }
+  };
 
-	const Block = async () => {
-		try {
-			const rentRef = ref(db, `/rent/${selectedRentId}`);
+  const Block = async () => {
+    try {
+      const rentRef = ref(db, `/rent/${selectedRentId}`);
 
-			const rent: IRent = (await get(query(rentRef))).val();
+      const rent: IRent = (await get(query(rentRef))).val();
 
-			if (rent.status != RentStatus.PENDENT) return;
+      if (rent.status != RentStatus.PENDENT) return;
 
-			const vehicleRef = ref(db, `/vehicles/${rent.vehicleId}`);
+      const vehicleRef = ref(db, `/vehicles/${rent.vehicleId}`);
 
-			const vehicle: IVehicle = (await get(query(vehicleRef))).val();
+      const vehicle: IVehicle = (await get(query(vehicleRef))).val();
 
-			const totalDays = rent?.totalDays ?? 0;
+      const totalDays = rent?.totalDays ?? 0;
 
-			vehicle.totalRent += 1;
-			vehicle.totalReceipt += totalDays * vehicle.price;
+      vehicle.totalRent += 1;
+      vehicle.totalReceipt += totalDays * vehicle.price;
 
-			rent.status = RentStatus.BLOCKED;
+      rent.status = RentStatus.BLOCKED;
 
-			await set(vehicleRef, vehicle);
-			await set(rentRef, rent);
+      await set(vehicleRef, vehicle);
+      await set(rentRef, rent);
 
-			const cacheRent = rents.find(x => x.id == selectedRentId);
+      const cacheRent = rents.find(x => x.id == selectedRentId);
 
-			if (cacheRent) {
-				cacheRent.status = RentStatus.APPROVED;
+      if (cacheRent) {
+        cacheRent.status = RentStatus.APPROVED;
 
-				setRents([...rents.filter(x => x.id != cacheRent?.id), cacheRent]);
-			}
+        setRents([...rents.filter(x => x.id != cacheRent?.id), cacheRent]);
+      }
 
-			toast({
-				title: `Locação ${rentConfirmed ? "confirmada" : "negada"} com sucesso ✔`
-			});
-		} catch (error) {
-			console.log(error);
-			toast({
-				title: "Um erro inesperado ocorreu ❌",
-				description: "Tivemos um problema ao tentar salvar seus dados, tente novamente mais tarde"
-			});
-		}
-	};
+      toast({
+        title: `Locação ${rentConfirmed ? "confirmada" : "negada"} com sucesso ✔`
+      });
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Um erro inesperado ocorreu ❌",
+        description: "Tivemos um problema ao tentar salvar seus dados, tente novamente mais tarde"
+      });
+    }
+  };
 
-	return (
-		<div className="pendent-announce-page">
-			<PageTitle pageName="Pendentes" />
-			<div className="filter">
-				<div className="filter-fields">
-					<TextBox placeholder="Pesquisar" onChange={addFilter} />
-					<Dropdown onChange={addOrdenation} options={orderOptions.map(x => x.showName)} placeholder="Ordenar Por" />
-				</div>
-			</div>
-			<div className="pendent-announce-container">
-				<div className="pendent-announce-container-cards">
-					{rents.map(rent => (
-						<Dialog key={rent.id}>
-							<DialogContent>
-								<form onSubmit={evento => { evento.preventDefault(); onSubmit(); }}>
-									<DialogHeader>
-										<DialogTitle>Você deseja aceitar esta solicitação?</DialogTitle>
-										<DialogDescription style={{ margin: "20px 0" }}>
-											<span>Ao confirmar, você aceita com os <a>Termos e condições</a></span>
-										</DialogDescription>
-									</DialogHeader>
-									<DialogFooter>
-										<DialogClose className="w-full">
-											<ConfirmButton className="modal-confirm-button" isSubmit text="Confirmar" />
-										</DialogClose>
-										<DialogClose className="w-full">
-											<ConfirmButton className="modal-confirm-button" text="Negar" onClick={() => Block()} />
-										</DialogClose>
-									</DialogFooter>
-								</form>
-							</DialogContent>
-							<DialogTrigger asChild>
-								<VehicleCard key={rent.id} isDeactivate={!(rent.status == RentStatus.PENDENT)} title={rent.vehicleName} image={rent.vehicleImage} onClick={(evento, id) => setSelectedRentId(rent.id)}>
-									<VehicleCardIcon icon={clockIcon} roundedIcon text={`De ${rent?.vehicleRentInitialDate ?? "-"} até ${rent?.vehicleRentFinalDate ?? "-"}`} />
-									<VehicleCardIcon icon={calendarIcon} text={`Solicitado dia ${rent?.createdAt ?? "-"}`} />
-									<VehicleCardIcon icon={infoIcon} text={`${rent.status == 1 ? "Locação APROVADA" : rent.status == 2 ? "Locação NEGADA" : "Locação PENDENTE"}`} />
-									<VehicleCardIcon icon={rent.rentUserImage} roundedIcon text={`${rent.rentUserName}`} />
-								</VehicleCard>
-							</DialogTrigger>
-						</Dialog>
-					))}
-				</div>
-			</div>
-		</div>
-	);
+  return (
+    <div className="pendent-announce-page">
+      <PageTitle pageName="Pendentes" />
+      <div className="filter">
+        <div className="filter-fields">
+          <TextBox placeholder="Pesquisar" onChange={addFilter} />
+          <Dropdown onChange={addOrdenation} options={orderOptions.map(x => x.showName)} placeholder="Ordenar Por" />
+        </div>
+      </div>
+      <div className="pendent-announce-container">
+        <div className="pendent-announce-container-cards">
+          {rents.map(rent => (
+            <Dialog key={rent.id}>
+              <DialogContent>
+                <form onSubmit={evento => { evento.preventDefault(); onSubmit(); }}>
+                  <DialogHeader>
+                    <DialogTitle>Você deseja aceitar esta solicitação?</DialogTitle>
+                    <DialogDescription style={{ margin: "20px 0" }}>
+                      <span>Ao confirmar, você aceita com os <a>Termos e condições</a></span>
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <DialogClose className="w-full">
+                      <ConfirmButton className="modal-confirm-button" isSubmit text="Confirmar" />
+                    </DialogClose>
+                    <DialogClose className="w-full">
+                      <ConfirmButton className="modal-confirm-button" text="Negar" onClick={() => Block()} />
+                    </DialogClose>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+              <DialogTrigger asChild>
+                <VehicleCard key={rent.id} isDeactivate={!(rent.status == RentStatus.PENDENT)} title={rent.vehicleName} image={rent.vehicleImage} onClick={(evento, id) => setSelectedRentId(rent.id)}>
+                  <VehicleCardIcon icon={clockIcon} roundedIcon text={`De ${rent?.vehicleRentInitialDate ?? "-"} até ${rent?.vehicleRentFinalDate ?? "-"}`} />
+                  <VehicleCardIcon icon={calendarIcon} text={`Solicitado dia ${rent?.createdAt ?? "-"}`} />
+                  <VehicleCardIcon icon={infoIcon} text={`${rent.status == 1 ? "Locação APROVADA" : rent.status == 2 ? "Locação NEGADA" : "Locação PENDENTE"}`} />
+                  <VehicleCardIcon icon={rent.rentUserImage} roundedIcon text={`${rent.rentUserName}`} />
+                </VehicleCard>
+              </DialogTrigger>
+            </Dialog>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default PendentAnnouncesPage;
