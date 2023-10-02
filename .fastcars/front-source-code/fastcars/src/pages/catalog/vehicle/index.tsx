@@ -114,7 +114,7 @@ const VehicleDetailPage = () => {
         status: RentStatus.PENDENT,
         createdAt: convertDate(new Date()),
         smartSearch: `${userLogged.name} ${apiVehicle.name} ${apiVehicle.price} ${apiVehicle.price} ${apiVehicle.userName} ${convertDate(date.from)} ${convertDate(date.to)} ${convertDate(new Date())}`,
-        totalDays: (date.from.getTime() - date.to.getTime()) / 86400000
+        totalDays: (date.to.getTime() - date.from.getTime()) / 86400000
       };
 
       const insertRentRef = ref(db, `/rent/${rent.id}`);

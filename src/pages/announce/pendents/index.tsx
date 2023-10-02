@@ -117,7 +117,7 @@ const PendentAnnouncesPage = () => {
       }
 
       toast({
-        title: `Locação ${rentConfirmed ? "confirmada" : "negada"} com sucesso ✔`
+        title: "Locação confirmada com sucesso ✔"
       });
     } catch (error) {
       console.log(error);
@@ -159,7 +159,7 @@ const PendentAnnouncesPage = () => {
       }
 
       toast({
-        title: `Locação ${rentConfirmed ? "confirmada" : "negada"} com sucesso ✔`
+        title: "Locação negada com sucesso ✔"
       });
     } catch (error) {
       console.log(error);

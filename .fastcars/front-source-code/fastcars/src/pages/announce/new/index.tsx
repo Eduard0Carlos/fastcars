@@ -6,6 +6,7 @@ import CancelButton from "components/cancel-button";
 import ICepInfo from "shared/interfaces/ICepInfo";
 import axios from "axios";
 import App from "shared/firebase";
+import { toast, useToast } from "components/toast/use-toast";
 
 import { refFromURL, set, update, query, get, getDatabase, ref } from "firebase/database";
 import { useNavigate } from "react-router-dom";
@@ -179,39 +180,46 @@ const NewAnnouncePage = () => {
 
     if (hasError) return;
 
-    const newVehicle: IVehicle = {
-      id: window.crypto.randomUUID(),
-      brand: brand!,
-      cep: cep!,
-      city: city!,
-      color: color!,
-      country: country!,
-      image: image!,
-      createdByUserId: loggedUser.id,
-      disponibility: daysOfTheWeek!,
-      fabricationYear: buildYear?.toString() ?? "0",
-      maxDoors: doorsQuantity!,
-      maxPersons: maxPersons!,
-      name: name!,
-      plate: plate!,
-      price: Number(price!),
-      stars: 5,
-      totalReceipt: 0,
-      totalRent: 0,
-      type: type!,
-      uf: uf!,
-      userImage: loggedUser.image_url,
-      userName: loggedUser.name,
-      userStars: 5,
-      smartSearch: `${name} ${brand} ${cep} ${city} ${color} ${country} ${loggedUser.name} ${buildYear} ${doorsQuantity} ${maxPersons} ${plate} ${price} ${5} ${type} ${uf}`,
-      location: "- km"
-    };
-
-    const newVehicleRef = ref(db, `vehicles/${newVehicle.id}`);
-
-    set(newVehicleRef, newVehicle).then(() => {
-      navigate("/announce/my");
-    });
+    try {
+      const newVehicle: IVehicle = {
+        id: window.crypto.randomUUID(),
+        brand: brand!,
+        cep: cep!,
+        city: city!,
+        color: color!,
+        country: country!,
+        image: image!,
+        createdByUserId: loggedUser.id,
+        disponibility: daysOfTheWeek!,
+        fabricationYear: buildYear?.toString() ?? "0",
+        maxDoors: doorsQuantity!,
+        maxPersons: maxPersons!,
+        name: name!,
+        plate: plate!,
+        price: Number(price!),
+        stars: 5,
+        totalReceipt: 0,
+        totalRent: 0,
+        type: type!,
+        uf: uf!,
+        userImage: loggedUser.image_url,
+        userName: loggedUser.name,
+        userStars: 5,
+        smartSearch: `${name} ${brand} ${cep} ${city} ${color} ${country} ${loggedUser.name} ${buildYear} ${doorsQuantity} ${maxPersons} ${plate} ${price} ${5} ${type} ${uf}`,
+        location: "- km"
+      };
+  
+      const newVehicleRef = ref(db, `vehicles/${newVehicle.id}`);
+  
+      set(newVehicleRef, newVehicle).then(() => {
+        navigate("/announce/my");
+      });
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Todos os campos devem ser preenchidos ℹ"
+      });
+    }
   };
 
   return (
